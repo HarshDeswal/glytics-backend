@@ -11,7 +11,7 @@ import os
 from datetime import datetime
 from functools import wraps
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 API_TOKEN = "12345"
 
