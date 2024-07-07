@@ -12,7 +12,7 @@ from datetime import datetime
 from functools import wraps
 app = Flask(__name__)
 
-CORS(app, resources={r"/*": {"origins": "*", "allow_headers": ["Content-Type"], "methods": ["GET", "POST"]}})
+CORS(app, resources={r"/*": {"origins": "https://vercel.com/harshdeswals-projects/glytics-frontend"}})
 API_TOKEN = "12345"
 
 DATABASE_URL = "sqlite:///./test.db"
@@ -30,7 +30,6 @@ def token_required(f):
     return decorator
 
 @app.route('/upload_csv/', methods=['POST'])
-@cross_origin(origin='*')
 @token_required
 def upload_csv():
     if 'file' not in request.files:
@@ -48,7 +47,6 @@ def upload_csv():
     return jsonify({"message": "File uploaded successfully","headers":df.columns.tolist()})
 
 @app.route('/query/', methods=['GET'])
-@cross_origin(origin='*')
 @token_required
 def query_data():
     session = SessionLocal()
