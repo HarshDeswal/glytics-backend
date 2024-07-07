@@ -6,12 +6,12 @@ from sqlalchemy import func
 from sqlalchemy import cast, Date
 from sqlalchemy.sql import text
 import pandas as pd
-from flask_cors import CORS
+from flask_cors import CORS,cross_origin
 import os
 from datetime import datetime
 from functools import wraps
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+
 
 API_TOKEN = "12345"
 
@@ -31,6 +31,7 @@ def token_required(f):
 
 @app.route('/upload_csv/', methods=['POST'])
 @token_required
+@cross_origin(origin='*')
 def upload_csv():
     if 'file' not in request.files:
         return jsonify({"error": "No file part"}), 400
@@ -48,6 +49,7 @@ def upload_csv():
 
 @app.route('/query/', methods=['GET'])
 @token_required
+@cross_origin(origin='*')
 def query_data():
     session = SessionLocal()
     table = Table('data', metadata, autoload_with=engine)
