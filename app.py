@@ -12,7 +12,7 @@ from datetime import datetime
 from functools import wraps
 app = Flask(__name__)
 
-CORS(app, resources={r"/*": {"origins": "https://vercel.com/harshdeswals-projects/glytics-frontend"}})
+CORS(app, resources={r"/*": {"origins": "https://vercel.com/harshdeswals-projects/glytics-frontend"}, "supports_credentials": True})
 API_TOKEN = "12345"
 
 DATABASE_URL = "sqlite:///./test.db"
