@@ -12,7 +12,7 @@ from datetime import datetime
 from functools import wraps
 app = Flask(__name__)
 
-
+CORS(app, resources={r"/*": {"origins": "*", "allow_headers": ["Content-Type"], "methods": ["GET", "POST", "OPTIONS"]}})
 API_TOKEN = "12345"
 
 DATABASE_URL = "sqlite:///./test.db"
@@ -31,7 +31,6 @@ def token_required(f):
 
 @app.route('/upload_csv/', methods=['POST'])
 @token_required
-@cross_origin(origin='*')
 def upload_csv():
     if 'file' not in request.files:
         return jsonify({"error": "No file part"}), 400
@@ -49,7 +48,6 @@ def upload_csv():
 
 @app.route('/query/', methods=['GET'])
 @token_required
-@cross_origin(origin='*')
 def query_data():
     session = SessionLocal()
     table = Table('data', metadata, autoload_with=engine)
