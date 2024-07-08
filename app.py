@@ -12,7 +12,7 @@ from datetime import datetime
 from functools import wraps
 app = Flask(__name__)
 
-CORS(app,origins=["https://glytics-frontend.vercel.app"])
+CORS(app)
 API_TOKEN = "12345"
 
 DATABASE_URL = "sqlite:///./test.db"
@@ -29,7 +29,7 @@ def token_required(f):
         return f(*args, **kwargs)
     return decorator
 
-@app.route('/upload_csv/', methods=['POST'])
+@app.route('/upload_csv/', methods=['POST','OPTIONS'])
 @token_required
 def upload_csv():
     if 'file' not in request.files:
@@ -44,7 +44,9 @@ def upload_csv():
     # Dynamically create the table schema
     table_name = 'data'
     df.to_sql(table_name, con=engine, if_exists='replace', index=False)
-    return jsonify({"message": "File uploaded successfully","headers":df.columns.tolist()})
+    response = {"message": "File uploaded successfully","headers":df.columns.tolist()}
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return jsonify(response)
 
 @app.route('/query/', methods=['GET'])
 @token_required
